@@ -32,16 +32,18 @@
     "inquirer": "7.3.3",
     "inquirer-directory": "2.2.0",
     "jest-styled-components": "7.1.1",
+    "leaflet": "1.9.4",
     "lint-staged": "13.0.3",
     "node-plop": "0.26.3",
     "plop": "2.7.6",
     "prettier": "2.7.1",
-    "react": "18.2.0",
+    "react": "18.3.1",
     "react-app-polyfill": "3.0.0",
-    "react-dom": "18.2.0",
+    "react-dom": "18.3.1",
     "react-helmet-async": "1.3.0",
     "react-i18next": "11.18.6",
     "react-is": "18.2.0",
+    "react-leaflet": "4.2.1",
     "react-redux": "7.2.8",
     "react-router-dom": "6.3.0",
     "react-scripts": "5.0.1",
@@ -118,5 +120,8 @@
         "statements": 90
       }
     }
+  },
+  "devDependencies": {
+    "@types/leaflet": "1.9.12"
   }
 }
