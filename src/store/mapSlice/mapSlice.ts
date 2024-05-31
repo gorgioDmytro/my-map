@@ -4,6 +4,7 @@ import { IMapReducer } from './types';
 
 const initialState: IMapReducer = {
   markers: [],
+  activeMarkerId: '',
   markersLoading: false,
   error: null,
 };
@@ -24,6 +25,12 @@ const mapSlice = createSlice({
       state.markersLoading = false;
       state.error = action.payload;
     },
+    setActiveMarkersId: (state, action: PayloadAction<string>) => {
+      state.activeMarkerId = action.payload;
+    },
+    clearActiveMarkersId: state => {
+      state.activeMarkerId = '';
+    },
   },
 });
 
@@ -31,6 +38,7 @@ export const {
   getMarkersDataRequest,
   getMarkersDataSuccess,
   getMarkersDataFailure,
+  setActiveMarkersId,
 } = mapSlice.actions;
 
 export default mapSlice.reducer;

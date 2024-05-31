@@ -1,4 +1,5 @@
 export const DEFAULT_ZOOM = 8;
+export const DEFAULT_FLY_TO_ZOOM = 12;
 
 export const DEFAULT_LAT = 31.510357;
 export const DEFAULT_LNG = 52.101027;

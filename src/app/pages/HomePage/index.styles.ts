@@ -11,3 +11,13 @@ export const MapWrapper = styled.div`
     height: 100%;
   }
 `;
+
+export const Header = styled.div`
+  margin: 0 -16px 16px;
+  padding: 18px 16px 16px;
+  border-bottom: 1px solid #d2d0d0;
+`;
+
+export const RightSiteContainer = styled.div`
+  padding: 0 16px;
+`;
