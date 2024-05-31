@@ -1,20 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { MapContainer, TileLayer, useMap } from 'react-leaflet';
-import L, { Map as LeafletMap } from 'leaflet';
+import { Map as LeafletMap } from 'leaflet';
 
 import ItemMarkerList from './ItemMarkerList';
 import { useAutoScaleMap } from '../../../hooks/useAutoScaleMap';
-import {
-  getMarkersDataRequest,
-  setActiveMarkersId,
-} from 'store/mapSlice/mapSlice';
-import { activeIcon, defaultIcon } from '../../components/MarkerIcons';
+import { getMarkersDataRequest } from 'store/mapSlice/mapSlice';
 
 import { RootState } from 'types';
 import { makeVewBoundsByMarkers } from '../../helpers';
 import { DEFAULT_CENTER, DEFAULT_ZOOM } from '../../../constants';
-import Stack from '@mui/material/Stack';
 
 import {
   MainWrapper,
@@ -23,6 +18,7 @@ import {
   RightSiteContainer,
 } from './index.styles';
 import Button from '@mui/material/Button';
+import { useMarkersUpdate } from '../../../hooks/useMarkersUpdate';
 
 const InitMapInstance = ({ callback }) => {
   const map = useMap();
@@ -33,15 +29,13 @@ const InitMapInstance = ({ callback }) => {
     }
   }, [map, callback]);
 
-  useAutoScaleMap();
-
   return null;
 };
 
 export function HomePage() {
   const [mapInstance, setMapInstance] = useState<LeafletMap | null>(null);
 
-  const { markers, activeMarkerId, markersLoading } = useSelector(
+  const { markers, markersLoading } = useSelector(
     (state: RootState) => state.map,
   );
 
@@ -59,34 +53,8 @@ export function HomePage() {
     if (!isMarkersData) dispatch(getMarkersDataRequest());
   }, [dispatch, isMarkersData]);
 
-  useEffect(() => {
-    if (mapInstance && isMarkersData) {
-      const bounds = makeVewBoundsByMarkers(markers);
-      mapInstance.fitBounds(bounds);
-    }
-  }, [mapInstance, isMarkersData, markers]);
-
-  useEffect(() => {
-    if (mapInstance && isMarkersData) {
-      markers.forEach(({ id, lat, lng }) => {
-        const markerInstance = L.marker([lat, lng], {
-          icon: id === activeMarkerId ? activeIcon : defaultIcon,
-        }).addTo(mapInstance);
-
-        markerInstance.on('click', () => {
-          dispatch(setActiveMarkersId(id));
-        });
-      });
-    }
-  }, [
-    dispatch,
-    activeMarkerId,
-    isMarkersData,
-    mapInstance,
-    activeIcon,
-    defaultIcon,
-    markers,
-  ]);
+  useMarkersUpdate(mapInstance);
+  useAutoScaleMap(mapInstance);
 
   return (
     <MainWrapper>
@@ -103,16 +71,14 @@ export function HomePage() {
         {mapInstance && (
           <>
             <Header>
-              <Stack direction="row" spacing={2}>
-                <Button
-                  size="small"
-                  variant="contained"
-                  onClick={centerMapHandler}
-                  disabled={markersLoading}
-                >
-                  Center
-                </Button>
-              </Stack>
+              <Button
+                size="small"
+                variant="contained"
+                onClick={centerMapHandler}
+                disabled={markersLoading}
+              >
+                Center
+              </Button>
             </Header>
             <ItemMarkerList />
           </>

@@ -3,27 +3,25 @@ import { RootState } from '../types';
 import { useEffect } from 'react';
 import { DEFAULT_FLY_TO_ZOOM } from '../constants';
 import { findMarkerById, makeVewBoundsByMarkers } from '../app/helpers';
-import { useMap } from 'react-leaflet';
+import { Map as LeafletMap } from 'leaflet';
 
-export function useAutoScaleMap() {
+export function useAutoScaleMap(mapInstance: LeafletMap | null) {
   const { markers, activeMarkerId } = useSelector(
     (state: RootState) => state.map,
   );
 
-  const map = useMap();
+  const isMarkersData = !!markers.length;
 
   useEffect(() => {
-    if (activeMarkerId.length === 1) {
-      const activeId = activeMarkerId[0];
-      const marker = findMarkerById(markers, activeId);
-
-      if (marker) {
-        map.flyTo([marker.lat, marker.lng], DEFAULT_FLY_TO_ZOOM);
+    if (mapInstance) {
+      if (activeMarkerId) {
+        const marker = findMarkerById(markers, activeMarkerId);
+        if (marker) {
+          mapInstance.flyTo([marker.lat, marker.lng], DEFAULT_FLY_TO_ZOOM);
+        }
+      } else if (isMarkersData) {
+        mapInstance.fitBounds(makeVewBoundsByMarkers(markers));
       }
     }
-    if (activeMarkerId.length > 1) {
-      const bounds = makeVewBoundsByMarkers(markers);
-      map.fitBounds(bounds);
-    }
-  }, [activeMarkerId, map, markers]);
+  }, [activeMarkerId, mapInstance, markers, isMarkersData]);
 }
