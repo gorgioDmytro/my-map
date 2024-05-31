@@ -5,6 +5,7 @@ import { Map as LeafletMap } from 'leaflet';
 
 import ItemMarkerList from './ItemMarkerList';
 import { useAutoScaleMap } from '../../../hooks/useAutoScaleMap';
+import { useMarkersUpdate } from '../../../hooks/useMarkersUpdate';
 import { getMarkersDataRequest } from 'store/mapSlice/mapSlice';
 
 import { RootState } from 'types';
@@ -18,7 +19,6 @@ import {
   RightSiteContainer,
 } from './index.styles';
 import Button from '@mui/material/Button';
-import { useMarkersUpdate } from '../../../hooks/useMarkersUpdate';
 
 const InitMapInstance = ({ callback }) => {
   const map = useMap();
