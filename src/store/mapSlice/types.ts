@@ -2,7 +2,8 @@ import { IMarker, TError } from 'types';
 
 export interface IMapReducer {
   markers: IMarker[];
-  activeMarkerId: string;
+  activeMarkersId: string[];
+  distance: number;
   markersLoading: boolean;
   error: TError;
 }

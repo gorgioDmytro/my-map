@@ -4,9 +4,10 @@ import { useEffect } from 'react';
 import L, { Map as LeafletMap } from 'leaflet';
 import { activeIcon, defaultIcon } from '../app/components/MarkerIcons';
 import { setActiveMarkersId } from '../store/mapSlice/mapSlice';
+import { checkIsMarkerActive } from '../app/helpers';
 
 export function useMarkersUpdate(mapInstance: LeafletMap | null) {
-  const { markers, activeMarkerId } = useSelector(
+  const { markers, activeMarkersId } = useSelector(
     (state: RootState) => state.map,
   );
 
@@ -17,7 +18,9 @@ export function useMarkersUpdate(mapInstance: LeafletMap | null) {
     if (mapInstance && isMarkersData) {
       markers.forEach(({ id, lat, lng }) => {
         const markerInstance = L.marker([lat, lng], {
-          icon: id === activeMarkerId ? activeIcon : defaultIcon,
+          icon: checkIsMarkerActive(activeMarkersId, id)
+            ? activeIcon
+            : defaultIcon,
         }).addTo(mapInstance);
 
         markerInstance.on('click', () => {
@@ -25,5 +28,5 @@ export function useMarkersUpdate(mapInstance: LeafletMap | null) {
         });
       });
     }
-  }, [dispatch, activeMarkerId, isMarkersData, mapInstance, markers]);
+  }, [dispatch, activeMarkersId, isMarkersData, mapInstance, markers]);
 }

@@ -13,6 +13,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Typography } from '@mui/material';
 import Stack from '@mui/material/Stack';
 import Skeleton from '@mui/material/Skeleton';
+import { checkIsMarkerActive } from '../../../helpers';
 
 const ItemMarker = styled.div<{ isActive: boolean }>`
   padding: 16px;
@@ -23,7 +24,7 @@ const ItemMarker = styled.div<{ isActive: boolean }>`
 
 export default function ItemMarkerList() {
   const dispatch = useDispatch();
-  const { activeMarkerId, markers, markersLoading } = useSelector(
+  const { activeMarkersId, markers, markersLoading } = useSelector(
     (state: RootState) => state.map,
   );
 
@@ -48,7 +49,7 @@ export default function ItemMarkerList() {
         <AccordionDetails>
           <Stack direction="column" spacing={2}>
             {markers.map(({ id, title, lat, lng }) => {
-              const isActive = activeMarkerId === id;
+              const isActive = checkIsMarkerActive(activeMarkersId, id);
               return (
                 <ItemMarker
                   key={id}
